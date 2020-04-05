@@ -44,16 +44,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  String text = "ON";
 
-  void _incrementCounter() {
+
+  void _changeBulb() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      //text = "OFF";
+      if(text == "ON") {
+        text = "OFF";
+      } else if (text == "OFF") {
+        text = "ON";
+      }
     });
   }
 
@@ -92,19 +98,19 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have pushed the button this many times:',
+              'Change the light',
             ),
             Text(
-              '$_counter',
+              '$text',
               style: Theme.of(context).textTheme.display1,
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
+        onPressed: _changeBulb,
+        //tooltip: 'Increment',
+        child: Icon(Icons.highlight),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
