@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mdi/mdi.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 void main() => runApp(MyApp());
 
@@ -44,8 +46,9 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  String text = "ON";
-
+  bool isOn = true;
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
 
   void _changeBulb() {
     setState(() {
@@ -55,12 +58,16 @@ class _MyHomePageState extends State<MyHomePage> {
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
       //text = "OFF";
-      if(text == "ON") {
-        text = "OFF";
-      } else if (text == "OFF") {
-        text = "ON";
+      if (isOn) {
+        isOn = false;
+      } else {
+        isOn = true;
       }
     });
+  }
+
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
   }
 
   @override
@@ -100,10 +107,53 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               'Change the light',
             ),
-            Text(
-              '$text',
-              style: Theme.of(context).textTheme.display1,
+            Icon(
+              Icons.highlight,
+              size: 200,
+              color: isOn ? currentColor : Colors.grey,
             ),
+            RaisedButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  child: AlertDialog(
+                    title: const Text('Pick a color!'),
+                    content: SingleChildScrollView(
+                      child: ColorPicker(
+                        pickerColor: pickerColor,
+                        onColorChanged: changeColor,
+                        showLabel: true,
+                        pickerAreaHeightPercent: 0.8,
+                      ),
+                      // Use Material color picker:
+                      //
+                      // child: MaterialPicker(
+                      //   pickerColor: pickerColor,
+                      //   onColorChanged: changeColor,
+                      //   showLabel: true, // only on portrait mode
+                      // ),
+                      //
+                      // Use Block color picker:
+                      //
+                      // child: BlockPicker(
+                      //   pickerColor: currentColor,
+                      //   onColorChanged: changeColor,
+                      // ),
+                    ),
+                    actions: <Widget>[
+                      FlatButton(
+                        child: const Text('Got it'),
+                        onPressed: () {
+                          setState(() => currentColor = pickerColor);
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ],
+                  ),
+                );
+              },
+              child: Text('Change the color'),
+            )
           ],
         ),
       ),
